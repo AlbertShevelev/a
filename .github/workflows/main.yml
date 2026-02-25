@@ -2,50 +2,50 @@ on: [push]
 
 
 jobs:
- testing:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v6
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
 
-     - uses: actions/setup-python@v6
-       with:
-         python-version: '3.14'
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
 
-     - run: pip install gradio mypy
+      - run: pip install gradio mypy
 
-     - run: mypy app.py
-
-
- build:
-   runs-on: ubuntu-latest
-   permissions:
-     contents: read
-     packages: write
+      - run: mypy app.py
 
 
-   steps:
-     - uses: actions/checkout@v6
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
 
-     - uses: docker/login-action@v3
-       with:
-         registry: ghcr.io
-         username: ${{ github.actor }}
-         password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
 
 
-     - uses: docker/metadata-action@v5
-       id: meta
-       with:
-         images: ghcr.io/${{ github.repository }}
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
 
-     - uses: docker/build-push-action@v6
-       with:
-         context: .
-         push: true
-         tags: ${{ steps.meta.outputs.tags }}
-         labels: ${{ steps.meta.outputs.labels }}
+      - uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/${{ github.repository }}
+
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
   
   
   deploy:
