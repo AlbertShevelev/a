@@ -11,9 +11,7 @@ jobs:
        with:
          python-version: '3.14'
 
-
      - run: pip install gradio mypy
-
 
      - run: mypy app.py
 
