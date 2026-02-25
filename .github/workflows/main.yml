@@ -49,3 +49,18 @@ jobs:
          push: true
          tags: ${{ steps.meta.outputs.tags }}
          labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: student
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASS }}
+          script: |
+            cd /home/student/shevelev
+            docker compose down
+            docker compose pull
+            docker compose up --detach
