@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-
+    needs: testing
 
     steps:
       - uses: actions/checkout@v6
